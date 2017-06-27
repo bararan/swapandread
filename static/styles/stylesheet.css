@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bookcase {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.src-result {
+    width: 100%;
+}
+
+/*.result-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border: 1px solid black;
+}*/

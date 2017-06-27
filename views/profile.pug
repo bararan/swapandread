@@ -1,0 +1,32 @@
+include ./partials/head.pug
+
+block content
+    if books
+        h1 Your bookcase
+        div(class="container-fluid bookcase")
+            each book in books
+                div(class="container-fluid col-md-3")
+                    form(id="remove-book" method="POST")
+                        input(class="hidden" name="bookID" value=book._id)
+                        button(type="submit" formaction="/removebook" class="btn src-result")
+                            img(src=book.imgUrl class="thumbnail")
+                            h4 #{book.title}
+                            h4 #{book.author}
+
+    h3 Find books and start swapping!
+    form(id="search-form" class="input-group" method="POST")
+        input(type="text" name="title" class="form-control" placeholder="Enter book title" required)
+        button(type="submit" class="input-group-addon" formaction="/search")
+            span(class="glyphicon glyphicon-search")
+    if searchTitle
+        h2 Top results for "#{searchTitle}"
+        div(id="search-results" class="container-fluid bookcase")
+            if (searchResults.length > 0)
+                each result in searchResults
+                    div(class="container-fluid col-md-3")
+                        form(id="add-book" method="POST")
+                            input(class="hidden" name="book" value=result)
+                            button(type="submit" formaction="/addbook" class="btn src-result col-md-3")
+                                img(src=result.imgUrl class="thumbnail")
+                                h4 #{result.title}
+                                h4 #{result.author}

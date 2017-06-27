@@ -1,0 +1,8 @@
+body
+    h2 #{title}
+    div(id="search-results" class="container-fluid result-container")
+        each result in results
+            button(class="btn src-result col-md-3" id=result.title onclick="addToCollection(this.id)")
+                img(src=result.imgUrl class="thumbnail")
+                h4 #{result.title}
+                h4 #{result.author}

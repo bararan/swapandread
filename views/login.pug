@@ -1,0 +1,29 @@
+include ./partials/head.pug
+
+block content
+    div(class="jumbotron text-center")
+        if loginMessage 
+            h3 #{loginMessage}
+        div(class="container-fluid" id="login-form")
+            form(id="login" method="POST")
+                input(
+                    type="text"
+                    class="form-control answer-field"
+                    name="username"
+                    placeholder="Username"
+                    required
+                    autofocus
+                )
+                
+                input(
+                    type="password"
+                    class="form-control answer-field"
+                    name="password"
+                    placeholder="Password"
+                    required
+                )
+                div(class="row")
+                    input(class="btn btn-submit" type="submit" value="Log in" formaction="/login")
+                    or
+                    button(class="btn btn-create" type="submit" formaction="/signup") Sign up
+    
