@@ -1,17 +1,37 @@
 include ./partials/head.pug
 
 block content
-    if books
-        h1 Your bookcase
-        div(class="container-fluid bookcase")
+    div(id="welcome" class="container-fluid")
+        h2 Welcome #{user.username}
+        if user.profile.fullName && user.profile.location
+            h5 #{user.profile.fullName} from #{user.profile.location}
+        button(class="btn btn-info" onclick="document.getElementById('welcome').classList.add('hidden');document.getElementById('profile-form').classList.remove('hidden');") Edit Profile
+    div(id="profile-form" class="container-fluid hidden")
+        h1 Edit your profile
+        form(id="edit-profile" method="POST" onsubmit="document.getElementById('welcome').classList.remove('hidden');document.getElementById('profile-form').classList.add('hidden');")
+            div(class="input-group")
+                span(class="label label-info") Your Name
+                input(name="fullName" type="text" placeholder="Name Surname" value=user.profile.fullName)
+            div(class="input-group")
+                span(class="label label-info") Your Location
+                input(name="location" type="text" placeholder="Town, Country/State" value=user.profile.location)
+            input(type="submit" formaction="/editProfile" value="Submit")       
+    h1 Your bookcase
+    div(class="container-fluid bookcase")
+        if books
             each book in books
-                div(class="container-fluid col-md-3")
-                    form(id="remove-book" method="POST")
+                div(class="container-fluid book-display")
+                    form(class=" book-form remove-book" method="POST")
                         input(class="hidden" name="bookID" value=book._id)
-                        button(type="submit" formaction="/removebook" class="btn src-result")
+                        button(type="submit" class="btn src-result" formaction="/removebook")
                             img(src=book.imgUrl class="thumbnail")
-                            h4 #{book.title}
-                            h4 #{book.author}
+                            div(class="book-title") #{book.title}
+                            h5 #{book.author}
+        else
+            h5 You don't have any books yet.
+            h5 Why don't you add some using the search form below or ask other users for their books?
+            
+            
 
     h3 Find books and start swapping!
     form(id="search-form" class="input-group" method="POST")
@@ -23,10 +43,10 @@ block content
         div(id="search-results" class="container-fluid bookcase")
             if (searchResults.length > 0)
                 each result in searchResults
-                    div(class="container-fluid col-md-3")
-                        form(id="add-book" method="POST")
+                    div(class="container-fluid book-display")
+                        form(class="book-form add-book" method="POST")
                             input(class="hidden" name="book" value=result)
-                            button(type="submit" formaction="/addbook" class="btn src-result col-md-3")
+                            button(type="submit" formaction="/addbook" class="btn src-result book-display")
                                 img(src=result.imgUrl class="thumbnail")
-                                h4 #{result.title}
-                                h4 #{result.author}
+                                div(class="book-title") #{result.title}
+                                h5 #{result.author}

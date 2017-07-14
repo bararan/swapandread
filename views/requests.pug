@@ -1,0 +1,39 @@
+include ./partials/head.pug
+
+block content
+    h2 Incoming requests
+    div(class="container-fluid request-container" id="incoming-requests")
+        each request in incoming
+            form(method="POST")
+                p #{request.fromUser} has requested #{request.bookTitle}
+                input(class="hidden" name="bookID" value=request.bookID)
+                input(class="hidden" name="bookTitle" value=request.bookTitle)
+                input(class="hidden" name="fromID" value=request.fromID)
+                input(class="hidden" name="fromUser" value=request.fromUser)
+                input(class="hidden" name="requestID" value=request._id)
+                input(type="submit" class="btn btn-info" value="Accept" formaction="/accept")
+                input(type="submit" class="btn btn-danger" value="Reject" formaction="/reject")
+    h2 Outgoing requests
+    div(class="container-fluid request-container" id="outgoing-requests")
+        each request in outgoing
+            form(method="POST")
+                p You have requested #{request.bookTitle}
+                input(class="hidden" name="bookID" value=request.bookID)
+                input(class="hidden" name="bookTitle" value=request.bookTitle)
+                input(class="hidden" name="fromID" value=request.fromID)
+                input(class="hidden" name="fromUser" value=request.fromUser)
+                input(class="hidden" name="requestID" value=request._id)
+                input(type="submit" class="btn btn-info" value="Cancel" formaction="/cancelrequest")
+    h2 Request history
+    if messages.length > 0
+        div(class="container-fluid" id="message-container")
+            form(method="POST")
+                each message in messages
+                    div(class="input-group")
+                        span(class="input-group-addon")
+                            input(type="checkbox" name="messageIDs" value=message._id)
+                        //- input(class="hidden" name="messageIDs" value=message._id)
+                        span #{message.message}
+                input(type="submit" value="Delete" formaction="/deletemessages")
+    else
+        h3 Not much to show here...

@@ -1,23 +1,56 @@
 body {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
 }
 
+#contents{
+    margin-top: 100px;
+}
+
+#profile-form {
+    margin-top: 50px;
+}
+
 .bookcase {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.book-display {
+    width: 16%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.book-form {
+    width: 100%;
+}
+
+.book-title {
+    width: 100%;
+    font-size: 14px;
+    height: 45px;
+    font-weight: bold;
+    white-space: normal;
 }
 
 .src-result {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    word-wrap: break-word;
 }
 
-/*.result-container {
+.request-container {
+    margin-top: 160px;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    border: 1px solid black;
-}*/
+}

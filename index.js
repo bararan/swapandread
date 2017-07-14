@@ -41,8 +41,8 @@ dbClient.connect(url, (err, db) => {
     app.set("port", (process.env.PORT || 5000));
     app.use(session({
             secret: "myDirtyLittleSecret"
-            , resave: true
-            , saveUninitialized: false
+            , resave: false
+            , saveUninitialized: true
             , store: new MongoStore(
                 {
                     db: db
@@ -78,10 +78,16 @@ dbClient.connect(url, (err, db) => {
                 if (user) {
                     return done(null, false, req.flash("loginMessage", "Username already exists. Please choose another one."));
                 }
-                const profile = {fullName: "", city: "", countryOrState: ""}
-                const newUser = {username: username, password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)), profile: profile};
-                db.collection("bookUsers").insertOne(newUser);
-                return done(null, {username: newUser.username, password: newUser.password}, req.flash("loginMessage", newUser.username + " is now a member!"))
+                const profile = {fullName: "", location: ""};
+                const uid = db.collection("bookUsers").count((err, count) => {
+                    if (err) {
+                        console.error(err);
+                        return done(err);
+                    }
+                    const newUser = {_id: count,username: username, password: bcrypt.hashSync(password, bcrypt.genSaltSync(8)), profile: profile};
+                    db.collection("bookUsers").insertOne(newUser);
+                    return done(null, {username: newUser.username, password: newUser.password}, req.flash("loginMessage", newUser.username + " is now a member!"))
+                })
             })
         }
     ))

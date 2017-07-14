@@ -1,15 +1,17 @@
 include ./partials/head.pug
 
 block content
-    div(id="search-results" class="container-fluid bookcase")
+    if indexMessage
+        h2 indexMessage
+    div(id="all-books" class="container-fluid bookcase")
         if (results.length > 0)
             each result in results
-                div(class="container-fluid col-md-3")
-                    form(id="request-book" method="POST")
-                        input(class="hidden" name="bookID" value=result._id)
+                div(class="container-fluid book-display")
+                    form(class="book-form request-book" method="POST")
+                        input(class="hidden" name="book" value=result)
                         button(type="submit" class="btn src-result" id=result.title formaction="/requestbook")
                             img(src=result.imgUrl class="thumbnail")
-                            h4 #{result.title}
-                            h4 #{result.author}
+                            div(class="book-title") #{result.title}
+                            h5 #{result.author}
         else
             h3 There aren't any books available yet. Add some books to get things started!
