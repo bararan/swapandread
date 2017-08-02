@@ -3,10 +3,38 @@ body {
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
+    margin-top: 60px;
+}
+
+a {
+    font-size: 26px;
+    margin-right: 10px;
+}
+
+a:hover {
+    text-decoration: none;
+    opacity: 0.7;
+    border-bottom: 3px solid;
+}
+
+a:visited, a:active {
+    text-decoration: none;
+}
+
+.jumbotron {
+    width: 100%;
+}
+
+#login-form {
+    width: 40%;
+}
+
+#logout {
+    float: right;
 }
 
 #contents{
-    margin-top: 100px;
+    margin-top: 40px;
 }
 
 #profile-form {
@@ -16,19 +44,43 @@ body {
 .bookcase {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
+    width: 100%;
+    /* align-items: flex-start;  */
+     /* justify-content: flex-start;   */
 }
 
-.book-display {
-    width: 16%;
-    display: flex;
+.book-form:hover .overlay {
+    z-index: 2;
+}
+
+.overlay {
+    background: #fff;
+    color: #575757;
+    opacity: 0.85;
+    position: relative;
+    font-size: 24px;
+    white-space: normal;
     flex-direction: column;
     justify-content: center;
+    align-items: justify;
+    top: -300px;
+    left: 0px;
+    z-index: -1;
+    display: none;
+}
+.book-display {
+    width: 16%;
+    height: 300px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: space-between; */
 }
 
 .book-form {
     width: 100%;
+    height: 100%;
 }
 
 .book-title {
@@ -41,6 +93,7 @@ body {
 
 .src-result {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -48,9 +101,90 @@ body {
 }
 
 .request-container {
-    margin-top: 160px;
-    width: 100%;
+    width: 60%;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.request {
+    width: 70%;
+    text-align: left;
+}
+
+.input-group {
+    display: flex;
     justify-content: space-between;
+    border: 2px solid lightgrey;
+    border-radius: 5px;
+    height: 38px;
+    margin-bottom: 2px;
+}
+
+.msg {
+    justify-content: flex-start
+}
+
+.input-group-addon {
+    background: none;
+    border: none;
+}
+
+label {
+    border: 2px solid slategrey;
+    border-radius: 2px;
+    min-width: 16px;
+    height: 16px;
+}
+
+input:checked + label {
+    background: darkgrey;
+}
+
+.simple {
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid darkgrey;
+    font-size: 18px;
+    height: 36px;
+    margin-bottom: 6px;
+}
+
+.simple label {
+    align-self: baseline;
+    height: 100%;
+    padding-bottom: 0px;
+    font-size: 24px;
+}
+
+.simple input {
+    border: none;
+    outline: none;
+    margin-left: 15px;
+}
+
+.noborder{
+    color: darkgrey;
+    border: none;
+}
+
+#book-src {
+    border: none;
+}
+
+.btn-src {
+    width: 36px;
+    background: none;
+    display: flex;
+    justify-content: center;
+}
+
+.alert {
+    width: 60%;
+    text-align: center;
+}
+
+.block {
+    width: 100%;
 }

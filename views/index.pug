@@ -2,16 +2,24 @@ include ./partials/head.pug
 
 block content
     if indexMessage
-        h2 indexMessage
+        div(class="alert alert-danger" role="alert") #{indexMessage}
     div(id="all-books" class="container-fluid bookcase")
         if (results.length > 0)
             each result in results
                 div(class="container-fluid book-display")
                     form(class="book-form request-book" method="POST")
                         input(class="hidden" name="book" value=result)
-                        button(type="submit" class="btn src-result" id=result.title formaction="/requestbook")
+                        //- - var onMouseover = "document.getElementById('hidden-" + result._id + "').classList.remove('hidden');" 
+                        //- - var onMouseout = "document.getElementById('hidden-" + result._id + "').classList.add('hidden');" 
+                        - var hiddenId = "hidden-" + result._id
+                        //- button(class="btn src-result" onmouseover=onMouseover onmouseout=onMouseout id=result._id)
+                        button(class="btn src-result" id=result._id)
                             img(src=result.imgUrl class="thumbnail")
                             div(class="book-title") #{result.title}
                             h5 #{result.author}
+                        button(type="submit" class="btn src-result overlay" id=hiddenId formaction="/requestbook")
+                            span(class="glyphicon glyphicon-plus")
+                            div Request
+                            //- div #{result.title}
         else
             h3 There aren't any books available yet. Add some books to get things started!

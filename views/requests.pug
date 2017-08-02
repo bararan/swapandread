@@ -1,39 +1,49 @@
 include ./partials/head.pug
 
 block content
+    if requestMessage
+        div(class="alert alert-info") #{requestMessage}
     h2 Incoming requests
     div(class="container-fluid request-container" id="incoming-requests")
+        if (incoming.length == 0)
+            div(class="container-fluid text-center")
+                h4 You have no incoming requests.
         each request in incoming
-            form(method="POST")
-                p #{request.fromUser} has requested #{request.bookTitle}
+            form(class="input-group" method="POST")
+                span(class="input-group-addon request") #{request.fromUser} has requested #{request.bookTitle}
                 input(class="hidden" name="bookID" value=request.bookID)
                 input(class="hidden" name="bookTitle" value=request.bookTitle)
                 input(class="hidden" name="fromID" value=request.fromID)
                 input(class="hidden" name="fromUser" value=request.fromUser)
                 input(class="hidden" name="requestID" value=request._id)
-                input(type="submit" class="btn btn-info" value="Accept" formaction="/accept")
-                input(type="submit" class="btn btn-danger" value="Reject" formaction="/reject")
+                div(class="btn-group")
+                    button(type="submit" class="btn btn-info intput-group-addon" value="Accept" formaction="/accept") Accept
+                    button(type="submit" class="btn btn-danger intput-group-addon" value="Reject" formaction="/reject") Reject
     h2 Outgoing requests
     div(class="container-fluid request-container" id="outgoing-requests")
+        if (outgoing.length==0)
+            div(class="container-fluid text-center")
+                h4 You have no outgoing requests.
         each request in outgoing
-            form(method="POST")
-                p You have requested #{request.bookTitle}
+            form(class="input-group" method="POST")
+                span(class="input-group-addon request") You have requested #{request.bookTitle}
                 input(class="hidden" name="bookID" value=request.bookID)
                 input(class="hidden" name="bookTitle" value=request.bookTitle)
                 input(class="hidden" name="fromID" value=request.fromID)
                 input(class="hidden" name="fromUser" value=request.fromUser)
                 input(class="hidden" name="requestID" value=request._id)
-                input(type="submit" class="btn btn-info" value="Cancel" formaction="/cancelrequest")
+                input(type="submit" class="btn btn-danger intput-group-addon" value="Cancel" formaction="/cancelrequest")
     h2 Request history
     if messages.length > 0
-        div(class="container-fluid" id="message-container")
+        div(class="container-fluid request-container" id="message-container")
             form(method="POST")
                 each message in messages
-                    div(class="input-group")
+                    div(class="input-group msg")
                         span(class="input-group-addon")
-                            input(type="checkbox" name="messageIDs" value=message._id)
+                            input(type="checkbox" id=message._id class="hidden" name="messageIDs" value=message._id)
+                            label(for=message._id)
                         //- input(class="hidden" name="messageIDs" value=message._id)
-                        span #{message.message}
-                input(type="submit" value="Delete" formaction="/deletemessages")
+                        span(class="input-group-addon request") #{message.message}
+                input(type="submit" class="btn btn-danger" value="Delete Selected" formaction="/deletemessages")
     else
         h3 Not much to show here...

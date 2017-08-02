@@ -1,8 +1,12 @@
 include ./partials/head.pug
 
 block content
+    div(id="contents")
+        div(class="container-fluid text-center") 
+            h1 Swap and Read
+            h4 Swap...Read...Repeat...
     div(class="jumbotron text-center")
-        if loginMessage 
+        if loginMessage
             h3 #{loginMessage}
         div(class="container-fluid" id="login-form")
             form(id="login" method="POST")
@@ -23,7 +27,7 @@ block content
                     required
                 )
                 div(class="row")
-                    input(class="btn btn-submit" type="submit" value="Log in" formaction="/login")
-                    or
-                    button(class="btn btn-create" type="submit" formaction="/signup") Sign up
+                    input(class="btn btn-info" type="submit" value="Log in" formaction="/login")
+                    span    or    
+                    button(class="btn btn-warning" type="submit" formaction="/signup") Sign up
     

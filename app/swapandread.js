@@ -10,7 +10,7 @@ const isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    req.flash("loginMessage", "Please log in or sign up to continue.");
+    req.flash("loginMessage", "Please log in or sign up to continue.")
     res.redirect("/login");
 }
 
@@ -22,19 +22,20 @@ module.exports = function(app, db, passport) {
     app.get("/", isLoggedIn, (req, res) => {
         const user = req.user;
         let indexMessage = req.flash("indexMessage");
+        console.log(indexMessage)
         if (indexMessage.length === 0) indexMessage = false;
         db.collection("books").find({}).toArray((err, results) => {
             if (err) {
                 console.error(err);
                 return // Maybe do something else here?!?
             }
-            return res.render("index", {indexMessge: indexMessage, results: results, user: user});
+            return res.render("index", {indexMessage: indexMessage, results: results, user: user});
         })
     })
     // Log in/sign up
     app.get("/login", (req, res) => {
         let loginMessage = req.flash("loginMessage");
-        if (loginMessage.length === 0) loginMessage = false;
+        if (loginMessage.length == 0) loginMessage = false;
         return res.render("login", {loginMessage: loginMessage});
     })
     // Profile page
@@ -51,16 +52,6 @@ module.exports = function(app, db, passport) {
         // req.session.searchResults = false;
         let profileMessage = req.flash("profileMessage");
         if (profileMessage.length === 0) profileMessage = false;
-        // if (req.session.userBooks) {
-        //     return res.render("profile", {
-        //         user: req.user
-        //         , books: req.session.userBooks 
-        //         , profileMsg: profileMessage
-        //         , searchTitle: searchTitle
-        //         , searchResults: searchResults
-        //     });
-        // }
-        // console.log("No books in session. Querying DB")
         db.collection("books").find({
             users: { 
                 $in: [user._id] 
@@ -74,11 +65,10 @@ module.exports = function(app, db, passport) {
                 console.error(err)
                 return;
             }
-            // req.session.userBooks = books; // Make sure that this does update the session!
             return res.render("profile", {
                 user: user
                 , books: books 
-                , profileMsg: profileMessage
+                , profileMessage: profileMessage
                 , searchTitle: searchTitle
                 , searchResults: searchResults
             });
@@ -87,25 +77,8 @@ module.exports = function(app, db, passport) {
     // Dashboard to view/manage requests
     app.get("/requests", isLoggedIn, (req, res) => {
         let requestMessage = req.flash("requestMessage");
-        if (requestMessage.legth === 0) requestMessage = false;
+        if (requestMessage.length === 0) requestMessage = false;
         const user = req.user;
-        // TODO: Rather than querying the DB each time this page is rendered save the results in session
-        // and update session when there's a change to requests or messages maybe?
-        // Also; when this has been implemented session should get updated using web sockets when new requests
-        // come in or requests are removed from the system.
-        // const incoming = req.session.incoming || false;
-        // const outgoing = req.session.outgoing || false;
-        // const messages = req.session.messages || false;
-        // if (req.session.incoming || req.session.outgoing || req.session.messages) {
-        //     return res.render("requests", {
-        //         requestMessage: requestMessage
-        //         , incoming: incoming
-        //         , outgoing: outgoing
-        //         , messages: messages
-        //         , user: user
-        //     });
-        // }
-        // console.log("No request history in session. Querying DB")
         db.collection("bookRequests").find(
             {$or: [ {fromID: user._id}, {toID: user._id} ]}
         ).toArray((err, documents) => {
@@ -129,10 +102,6 @@ module.exports = function(app, db, passport) {
                     console.error(err);
                     return;
                 }
-                // TODO: Does this actually do the trick?!?
-                // req.session.incoming = incoming;
-                // req.session.outgoing = outgoing;
-                // req.session.messages = messages;
                 return res.render("requests", {
                     requestMessage: requestMessage
                     , incoming: incoming
@@ -242,12 +211,9 @@ module.exports = function(app, db, passport) {
                                 , imgUrl: imgUrl 
                             }
                         });
-                        // req.session.searchTitle = req.body.title;
-                        // req.session.searchResults = searchResults;
                         req.flash("searchTitle", req.body.title);
-                        req.flash("searchResults", searchResults); //JSON.stringify(searchResults));
+                        req.flash("searchResults", searchResults);
                         return res.redirect("/profile");
-                        // return res.render("search", {title: 'Top results for "' + req.body.title + '"', results: searchResults});
                     });
                 });
             }
@@ -280,7 +246,6 @@ module.exports = function(app, db, passport) {
                 console.error(err);
                 return;
             }
-            // req.session.userBooks.push(book); // TODO: Shall we really keep the books in session?!?
             return res.redirect("profile");
         })
     })
@@ -304,9 +269,7 @@ module.exports = function(app, db, passport) {
                     console.error(err);
                     return;
                 }
-                // const ind = req.session.userBooks.findIndex((book)=>{return book._id == bookID});
                 db.collection("books").deleteOne({_id: bookID, users: {$size: 0}}); // Delete books if no user has them anymore.
-                // req.session.userBooks.splice(ind, 1);
                 return res.redirect("profile");
             }
         )
@@ -321,6 +284,7 @@ module.exports = function(app, db, passport) {
         const fromUser = req.user.username;
         const fromID = req.user._id;
         const book = JSON.parse(req.body.book);
+        console.log(req.body)
         if (book.users.findIndex((userID)=>{return userID == fromID}) > -1) {
             req.flash("indexMessage", "This book is already in your collection!");
             return res.redirect("/")
@@ -342,8 +306,6 @@ module.exports = function(app, db, passport) {
                     console.error(err);
                     return;
                 }
-                // TODO: alert online users of the new request if they are among the recipients here!
-                // if (req.session.outgoing) req.session.outgoing.push(response);
                 req.flash("requestMessage", "You have requested " + bookTitle + ".");
                 return res.redirect("/requests")
             }
@@ -418,9 +380,6 @@ module.exports = function(app, db, passport) {
                                         console.error(err);
                                         return;
                                     }
-                                    // const ind = req.session.incoming.findIndex((r)=>{return r._id === requestID});
-                                    // req.session.incoming.splice(ind, 1);
-                                    // req.session.messages.push("You have accepted " + fromUser + "'s " + " request for " + bookTitle + ".")
                                     req.flash("requestMessage", "You have accepted " + fromUser + "'s " + " request for " + bookTitle + ".")
                                     res.redirect("/requests");
                                 }
@@ -457,9 +416,6 @@ module.exports = function(app, db, passport) {
                         }
                     ]
                     , (err, response) => {
-                        // const ind = req.session.incoming.findIndex((r)=>{return r._id === requestID});
-                        // req.session.incoming.splice(ind, 1);
-                        // req.session.messages.push("You have rejected " + fromUser + "'s request for " + bookTitle + ".");
                         return res.redirect("/requests");
                     }
                 )
